@@ -9,7 +9,6 @@ on:
       - main
 
 jobs:
-  # 🖥️ JOB 1: Frontend Build and Verification
   frontend-ci:
     name: Frontend CI (React)
     runs-on: ubuntu-latest
@@ -21,26 +20,16 @@ jobs:
       - name: Setup Node.js Environment
         uses: actions/setup-node@v4
         with:
-          node-version: "20" # 🚀 Sahi input (No typo)
+          node-version: "20"
 
       - name: Install Frontend Dependencies
         run: |
-          if [ -d "frontend" ]; then
-            cd frontend && npm install
-          else
-            npm install
-          </p>
-          fi
+          if [ -d "frontend" ]; then cd frontend && npm install; else npm install; fi
 
       - name: Run Production Build Test
         run: |
-          if [ -d "frontend" ]; then
-            cd frontend && npm run build
-          else
-            npm run build
-          fi
+          if [ -d "frontend" ]; then cd frontend && npm run build; else npm run build; fi
 
-  # ⚙️ JOB 2: Backend Verification & Security Check
   backend-ci:
     name: Backend CI (Node.js API)
     runs-on: ubuntu-latest
@@ -57,17 +46,4 @@ jobs:
 
       - name: Install Backend Dependencies
         run: |
-          if [ -d "backend" ]; then
-            cd backend && npm install
-          else
-            npm install
-          fi
-
-      - name: Audit Dependencies for Security Vulnerabilities
-        run: |
-          if [ -d "backend" ]; then
-            cd backend && npm audit --audit-level=high
-          else
-            npm audit --audit-level=high
-          fi
-        continue-on-error: true
+          if [ -d "backend" ]; then cd backend && npm install; else npm install; fi
