@@ -1,0 +1,114 @@
+.auth-container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(circle at top right, #064e3b22, #090a0c); /* Obsidian Emerald Gradient */
+    color: #f1f5f9;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.auth-card {
+    background: #111318;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    padding: 40px;
+    border-radius: 20px;
+    width: 400px;
+    max-width: 90%;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+    text-align: center;
+}
+
+.auth-card h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+    background: linear-gradient(to bottom, #f1f5f9, #64748b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.auth-subtitle {
+    color: #64748b;
+    font-size: 14px;
+    margin-bottom: 30px;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    gap: 8px;
+}
+
+.input-group label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #94a3b8;
+}
+
+.input-group input {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 12px 16px;
+    border-radius: 12px;
+    color: #f1f5f9;
+    font-size: 15px;
+    outline: none;
+    transition: 0.3s;
+}
+
+.input-group input:focus {
+    border-color: #10b981; /* Emerald Green */
+    background: rgba(16, 185, 129, 0.02);
+}
+
+.auth-btn {
+    background: #10b981;
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 10px;
+}
+
+.auth-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(16, 185, 129, 0.4);
+}
+
+.auth-switch {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #64748b;
+}
+
+.auth-switch span {
+    color: #10b981;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.auth-switch span:hover {
+    text-decoration: underline;
+}
+
+.error-msg {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 13px;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
