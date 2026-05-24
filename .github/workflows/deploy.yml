@@ -24,11 +24,11 @@ jobs:
 
       - name: Install Frontend Dependencies
         run: |
-          if [ -d "frontend" ]; then cd frontend && npm install; else npm install; fi
+          cd frontend && npm install
 
       - name: Run Production Build Test
         run: |
-          if [ -d "frontend" ]; then cd frontend && npm run build; else npm run build; fi
+          cd frontend && npm run build
 
   backend-ci:
     name: Backend CI (Node.js API)
@@ -46,4 +46,4 @@ jobs:
 
       - name: Install Backend Dependencies
         run: |
-          if [ -d "backend" ]; then cd backend && npm install; else npm install; fi
+          cd backend && npm install
