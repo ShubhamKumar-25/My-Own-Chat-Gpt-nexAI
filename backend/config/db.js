@@ -22,7 +22,13 @@
 
 const mysql = require("mysql2/promise");
 const fs = require("fs");
+const path = require("path"); // 1. Path module ko import kiya
 require("dotenv").config();
+
+// 2. Safe path resolution: Agar DB_SSL_CA defined nahi hai, toh default path use hoga
+const certPath = process.env.DB_SSL_CA 
+  ? path.resolve(process.env.DB_SSL_CA) 
+  : path.join(__dirname, "..", "certs", "isrgrootx1.pem");
 
 const pool = mysql.createPool({
   host: process.env.DB_HOST,
@@ -36,7 +42,8 @@ const pool = mysql.createPool({
   queueLimit: 0,
 
   ssl: {
-    ca: fs.readFileSync(process.env.DB_SSL_CA),
+    // 3. fs.readFileSync ab hamesha ek valid string path receive karega
+    ca: fs.readFileSync(certPath),
     rejectUnauthorized: true,
   },
 });
