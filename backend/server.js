@@ -15,15 +15,20 @@ if (process.env.FRONTEND_URL) {
   allowedOrigins.push(process.env.FRONTEND_URL);
 }
 
+// app.use(cors({
+//   origin: function (origin, callback) {
+//     // !origin checks for server-to-server or postman requests
+//     if (!origin || allowedOrigins.includes(origin)) {
+//       callback(null, true);
+//     } else {
+//       callback(new Error('CORS Policy Blocked: Unauthorized Origin'));
+//     }
+//   },
+//   credentials: true
+// }));
+
 app.use(cors({
-  origin: function (origin, callback) {
-    // !origin checks for server-to-server or postman requests
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('CORS Policy Blocked: Unauthorized Origin'));
-    }
-  },
+  origin: '*', 
   credentials: true
 }));
 
