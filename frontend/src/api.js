@@ -1,11 +1,28 @@
+// import axios from 'axios';
+
+// // const API = axios.create({ baseURL: 'https://my-own-chat-gpt-nexai.onrender.com/api/chat' });
+// const API = axios.create({ baseURL: 'https://my-own-chat-gpt-nexai.onrender.com/api/chat' });
+
+// export const signup = (userData) => API.post('/signup', userData);
+// export const login = (userData) => API.post('/login', userData);
+
+// export const sendMessage = (messageData) => API.post('/send', messageData);
+// export const fetchHistory = (userId) => API.get(`/history?userId=${userId}`);
+// export const deleteChat = (userId) => API.delete(`/delete?userId=${userId}`);
+
+
+
+
 import axios from 'axios';
 
-// const API = axios.create({ baseURL: 'https://my-own-chat-gpt-nexai.onrender.com/api/chat' });
-const API = axios.create({ baseURL: 'https://my-own-chat-gpt-nexai.onrender.com/api/chat' });
+// Base URL ko sirf main domain tak rakhein, routes niche alag se handle honge
+const API = axios.create({ baseURL: 'https://my-own-chat-gpt-nexai.onrender.com' });
 
-export const signup = (userData) => API.post('/signup', userData);
-export const login = (userData) => API.post('/login', userData);
+// 🔐 Authentication Routes (Ab sahi URL banega: /api/auth/signup)
+export const signup = (userData) => API.post('/api/auth/signup', userData);
+export const login = (userData) => API.post('/api/auth/login', userData);
 
-export const sendMessage = (messageData) => API.post('/send', messageData);
-export const fetchHistory = (userId) => API.get(`/history?userId=${userId}`);
-export const deleteChat = (userId) => API.delete(`/delete?userId=${userId}`);
+// 💬 Chat Routes (Ab sahi URL banega: /api/chat/send)
+export const sendMessage = (messageData) => API.post('/api/chat/send', messageData);
+export const fetchHistory = (userId) => API.get(`/api/chat/history?userId=${userId}`);
+export const deleteChat = (userId) => API.delete(`/api/chat/delete?userId=${userId}`);
