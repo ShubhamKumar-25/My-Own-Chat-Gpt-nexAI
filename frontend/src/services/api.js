@@ -1,7 +1,7 @@
-
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api';
+// 🌐 Localhost hata kar apna Render ka Backend URL dal diya
+const API_URL = 'https://my-own-chat-gpt-nexai.onrender.com/api';
 
 const api = axios.create({
     baseURL: API_URL,

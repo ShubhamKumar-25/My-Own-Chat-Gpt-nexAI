@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
+import api from "../api"; // Apne folder ke structure ke hisab se path set karein
 import "../styles/Auth.css";
 
 const Auth = () => {
