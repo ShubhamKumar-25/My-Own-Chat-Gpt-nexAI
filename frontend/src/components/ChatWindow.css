@@ -422,3 +422,55 @@ html, body {
 ::-webkit-scrollbar-thumb:hover {
     background: var(--text-muted);
 }
+
+
+
+
+
+
+
+
+/* --- Media Queries for Tablets and Mobiles --- */
+
+/* Tablets (1024px se chhote screens) */
+@media (max-width: 1024px) {
+    .chat-box, .input-wrapper {
+        padding-left: 5%;
+        padding-right: 5%; /* Side padding kam kar di taaki chat space bade */
+    }
+}
+
+/* Mobiles (768px se chhote screens) */
+@media (max-width: 768px) {
+    .main-layout {
+        flex-direction: column; /* Sidebar aur chat ko upar-neeche karne ke liye */
+    }
+
+    .sidebar {
+        width: 100%;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        padding: 15px;
+    }
+
+    .logo-title {
+        margin-bottom: 15px;
+    }
+
+    .session-list {
+        display: none; /* Mobile par chat history chhupa sakte hain ya dropdown bana sakte hain */
+    }
+
+    .chat-box {
+        padding: 20px 15px;
+    }
+
+    .bubble {
+        max-width: 85%; /* Mobile screen par bubble ko thoda bada space diya */
+    }
+
+    .input-wrapper {
+        padding: 15px;
+    }
+}
