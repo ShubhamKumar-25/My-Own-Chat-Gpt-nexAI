@@ -2,24 +2,25 @@
 
 /* --- Premium Tech Theme Variables --- */
 :root {
-    --primary-bg: #090a0c;          
-    --sidebar-bg: #111318;         
+    --primary-bg: #090a0c;          /* Pure Deep Matte Black */
+    --sidebar-bg: #111318;          /* Slightly lighter obsidian */
     --card-bg: rgba(255, 255, 255, 0.03);
-    --accent-color: #10b981;       
-    --text-main: #f1f5f9;          
-    --text-muted: #64748b;         
+    --accent-color: #10b981;        /* Premium Emerald Green */
+    --text-main: #f1f5f9;           /* Ice White */
+    --text-muted: #64748b;          /* Cool Slate */
     --user-bubble: linear-gradient(135deg, #10b981 0%, #059669 100%);
     --border-color: rgba(255, 255, 255, 0.07);
-    --chat-gradient: radial-gradient(circle at top right, #064e3b22, #090a0c); 
+    --chat-gradient: radial-gradient(circle at top right, #064e3b22, #090a0c); /* Subtle Emerald Glow */
     --active-session-bg: rgba(16, 185, 129, 0.1);
 }
 
 [data-theme='light'] {
+    /* Light Theme: Soft Porcelain & Indigo */
     --primary-bg: #fdfdfd;
     --sidebar-bg: #f1f5f9;
     --card-bg: rgba(0, 0, 0, 0.03);
-    --accent-color: #4f46e5;       
-    --text-main: #0f172a;          
+    --accent-color: #4f46e5;        /* Royal Indigo */
+    --text-main: #0f172a;           /* Deep Ink */
     --text-muted: #475569;
     --user-bubble: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%);
     --border-color: rgba(0, 0, 0, 0.08);
@@ -47,7 +48,7 @@ html, body {
 /* Main Layout Fixes */
 .main-layout {
     display: flex;
-    height: 100vh; /* Line 113 Multi-browser compatible safe height */
+    height: 100vh; 
     width: 100%;
     position: relative;
 }
@@ -106,7 +107,6 @@ html, body {
     flex-direction: column;
 }
 
-/* Line 380 structure correction */
 .session-item-container {
     display: flex;
     align-items: center;
@@ -375,15 +375,27 @@ html, body {
     cursor: not-allowed;
 }
 
-/* Placeholder */
-.placeholder-text { text-align: center; margin: auto; max-width: 500px; }
+/* Placeholder Fixes for All Screen Layout Engines */
+.placeholder-text { 
+    text-align: center; 
+    margin: auto; 
+    max-width: 500px; 
+}
 .placeholder-text h1 {
     font-size: 2.8rem;
     font-weight: 800;
+    margin-bottom: 12px;
+
+    /* Fallback color for engines that crash on clipping */
+    color: var(--text-main);
+
+    /* Desktop gradient masking setup */
     background: linear-gradient(to bottom, var(--text-main), var(--text-muted));
+    background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    margin-bottom: 12px;
+    
+    transition: none !important;
 }
 .placeholder-text p { color: var(--text-muted); font-size: 16px; }
 
@@ -472,7 +484,6 @@ html, body {
         font-size: 12px;
     }
 
-    /* Hide text or logout layout components adjustments on extra-small mobile */
     .logout-btn {
         padding: 6px 10px;
     }
@@ -482,8 +493,14 @@ html, body {
         gap: 16px;
     }
 
+    /* 4. Strict Mobile Overrides for Heading Layout Engines */
     .placeholder-text h1 {
-        font-size: 1.6rem; 
+        font-size: 1.8rem; 
+        color: var(--text-main) !important;
+        background: none !important;
+        -webkit-background-clip: unset !important;
+        background-clip: unset !important;
+        -webkit-text-fill-color: initial !important;
     }
 
     .bubble {
