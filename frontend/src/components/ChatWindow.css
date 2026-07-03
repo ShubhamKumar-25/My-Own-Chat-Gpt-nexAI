@@ -429,48 +429,83 @@ html, body {
 
 
 
+/* --- Premium Mobile & Tablet Responsive CSS --- */
 
-/* --- Media Queries for Tablets and Mobiles --- */
-
-/* Tablets (1024px se chhote screens) */
+/* Tablets & Small Laptops (1024px tak) */
 @media (max-width: 1024px) {
     .chat-box, .input-wrapper {
         padding-left: 5%;
-        padding-right: 5%; /* Side padding kam kar di taaki chat space bade */
+        padding-right: 5%;
     }
 }
 
-/* Mobiles (768px se chhote screens) */
+/* Mobiles (768px tak) */
 @media (max-width: 768px) {
+    /* 1. Main Layout ko hamesha screen me fit rakho */
     .main-layout {
-        flex-direction: column; /* Sidebar aur chat ko upar-neeche karne ke liye */
+        position: relative;
+        overflow: hidden;
     }
 
+    /* 2. Sidebar ko mobile par chhupa do (Slide-in Menu) */
+    /* Note: Jab aap responsive toggle functionality banaoge, toh bas ek '.open' class add karni hogi */
     .sidebar {
-        width: 100%;
-        height: auto;
-        border-right: none;
-        border-bottom: 1px solid var(--border-color);
-        padding: 15px;
+        position: absolute;
+        top: 0;
+        left: -280px; /* Initially hidden screen ke bahar */
+        height: 100%;
+        z-index: 99;
+        box-shadow: 5px 0 25px rgba(0, 0, 0, 0.5);
+        transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    .logo-title {
-        margin-bottom: 15px;
+    /* Jab sidebar open hoga tab ye class add hogi */
+    .sidebar.open {
+        left: 0; 
     }
 
-    .session-list {
-        display: none; /* Mobile par chat history chhupa sakte hain ya dropdown bana sakte hain */
+    /* 3. Header ko full width aur proper spacing do */
+    .chat-header {
+        padding: 12px 16px;
     }
 
+    .header-title {
+        font-size: 16px;
+    }
+
+    /* 4. Chat Box Padding Fix (Jo text pichak raha tha) */
     .chat-box {
-        padding: 20px 15px;
+        padding: 20px 16px;
+        gap: 16px;
+    }
+
+    .placeholder-text h1 {
+        font-size: 1.8rem; /* Mobile par heading thodi chhoti */
     }
 
     .bubble {
-        max-width: 85%; /* Mobile screen par bubble ko thoda bada space diya */
+        max-width: 88%; /* Chat bubbles ko zyada space milega */
+        font-size: 14.5px;
+        padding: 10px 16px;
     }
 
+    /* 5. Input Area Styling for Mobile */
     .input-wrapper {
-        padding: 15px;
+        padding: 12px 16px;
+    }
+
+    .input-area {
+        padding: 4px 12px;
+        border-radius: 12px;
+    }
+
+    .chat-input {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .send-button {
+        padding: 8px 16px;
+        font-size: 14px;
     }
 }
