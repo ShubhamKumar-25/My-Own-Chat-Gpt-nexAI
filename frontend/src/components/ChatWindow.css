@@ -375,7 +375,7 @@ html, body {
     cursor: not-allowed;
 }
 
-/* Placeholder Fixes for All Screen Layout Engines */
+/* --- Fixed Placeholder Config (Forced-Dark Proof) --- */
 .placeholder-text { 
     text-align: center; 
     margin: auto; 
@@ -386,14 +386,14 @@ html, body {
     font-weight: 800;
     margin-bottom: 12px;
 
-    /* Fallback color for engines that crash on clipping */
-    color: var(--text-main);
+    /* Fixed Force: Direct clean injection variables */
+    color: var(--text-main) !important;
 
-    /* Desktop gradient masking setup */
-    background: linear-gradient(to bottom, var(--text-main), var(--text-muted));
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    /* System filters aur dynamic overlays ko kill karne ke liye code setup */
+    background: none !important;
+    -webkit-background-clip: unset !important;
+    background-clip: unset !important;
+    -webkit-text-fill-color: initial !important;
     
     transition: none !important;
 }
@@ -495,7 +495,7 @@ html, body {
 
     /* 4. Strict Mobile Overrides for Heading Layout Engines */
     .placeholder-text h1 {
-        font-size: 1.8rem; 
+        font-size: 1.8rem !important; 
         color: var(--text-main) !important;
         background: none !important;
         -webkit-background-clip: unset !important;
