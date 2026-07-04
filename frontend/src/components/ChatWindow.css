@@ -12,6 +12,11 @@
     --border-color: rgba(255, 255, 255, 0.07);
     --chat-gradient: radial-gradient(circle at top right, #064e3b22, #090a0c); /* Subtle Emerald Glow */
     --active-session-bg: rgba(16, 185, 129, 0.1);
+
+    /* Sidebar width is a single source of truth so open/closed math
+       never gets out of sync between breakpoints. Caps at 82vw so it
+       never fills the whole screen on very small phones. */
+    --sidebar-w: min(280px, 82vw);
 }
 
 [data-theme='light'] {
@@ -34,6 +39,7 @@
     margin: 0;
     padding: 0;
     transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s ease, border-color 0.3s ease;
+    -webkit-tap-highlight-color: transparent;
 }
 
 html, body {
@@ -43,12 +49,14 @@ html, body {
     font-family: 'Plus Jakarta Sans', sans-serif;
     color: var(--text-main);
     overflow: hidden;
+    overflow-x: hidden; /* guards against any accidental horizontal scroll on mobile */
 }
 
 /* Main Layout Fixes */
 .main-layout {
     display: flex;
-    height: 100vh; 
+    height: 100vh;
+    height: 100dvh; /* accounts for mobile browser toolbars; falls back to 100vh on old browsers */
     width: 100%;
     position: relative;
 }
@@ -61,7 +69,10 @@ html, body {
     display: flex;
     flex-direction: column;
     padding: 20px;
+    padding-top: max(20px, env(safe-area-inset-top));
+    padding-bottom: max(20px, env(safe-area-inset-bottom));
     z-index: 100;
+    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.4s ease, border-color 0.3s ease;
 }
 
 .sidebar-close-btn {
@@ -71,6 +82,8 @@ html, body {
     color: var(--text-muted);
     font-size: 20px;
     cursor: pointer;
+    min-width: 44px;
+    min-height: 44px;
 }
 
 .new-chat-btn {
@@ -140,6 +153,8 @@ html, body {
     padding: 8px;
     opacity: 0;
     transition: opacity 0.2s ease;
+    min-width: 36px;
+    min-height: 36px;
 }
 
 .session-item-container:hover .delete-btn {
@@ -150,6 +165,15 @@ html, body {
     opacity: 1 !important;
 }
 
+/* Touch devices have no hover state, so the delete button was
+   effectively invisible/unreachable on mobile. Keep it visible
+   whenever the primary input has no hover capability. */
+@media (hover: none) {
+    .delete-btn {
+        opacity: 0.55;
+    }
+}
+
 /* Chat Container */
 .chat-container {
     flex: 1;
@@ -158,19 +182,40 @@ html, body {
     background: var(--chat-gradient);
     position: relative;
     width: 100%;
+    min-width: 0; /* prevents flex children from forcing horizontal overflow */
 }
 
 /* Header UI Elements */
 .chat-header {
     padding: 18px 30px;
+    padding-top: max(18px, env(safe-area-inset-top));
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 12px;
     background: transparent;
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--border-color);
     z-index: 10;
+}
+
+.header-start {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0; /* allows the title to truncate instead of pushing actions off-screen */
+}
+
+.header-title-group {
+    min-width: 0;
+}
+
+.header-title-group .header-title {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /* Hamburger Trigger */
@@ -181,6 +226,12 @@ html, body {
     color: var(--text-main);
     font-size: 24px;
     cursor: pointer;
+    flex-shrink: 0;
+    min-width: 44px;
+    min-height: 44px;
+    display: none;
+    align-items: center;
+    justify-content: center;
 }
 
 .header-title {
@@ -202,12 +253,14 @@ html, body {
     height: 7px;
     background-color: #10b981;
     border-radius: 50%;
+    flex-shrink: 0;
 }
 
 .header-actions {
     display: flex;
     align-items: center;
     gap: 15px;
+    flex-shrink: 0;
 }
 
 .user-avatar {
@@ -221,6 +274,7 @@ html, body {
     justify-content: center;
     font-weight: bold;
     font-size: 14px;
+    flex-shrink: 0;
 }
 
 .logout-btn {
@@ -232,6 +286,10 @@ html, body {
     cursor: pointer;
     font-size: 13px;
     font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
 }
 
 .logout-btn:hover {
@@ -252,6 +310,7 @@ html, body {
     display: flex;
     align-items: center;
     gap: 8px;
+    white-space: nowrap;
 }
 
 .theme-toggle:hover {
@@ -262,6 +321,7 @@ html, body {
 .chat-box {
     flex: 1;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     padding: 30px 15%;
     display: flex;
     flex-direction: column;
@@ -307,6 +367,11 @@ html, body {
     padding: 2px 6px;
     border-radius: 4px;
     font-size: 14px;
+    word-break: break-word;
+}
+.markdown-content pre {
+    overflow-x: auto;
+    max-width: 100%;
 }
 
 /* Mic Setup */
@@ -319,6 +384,9 @@ html, body {
     display: flex;
     align-items: center;
     justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+    flex-shrink: 0;
 }
 .mic-button.listening { animation: pulse 1.5s infinite; }
 
@@ -331,6 +399,7 @@ html, body {
 /* Input Wrapper & Area */
 .input-wrapper {
     padding: 25px 15%;
+    padding-bottom: max(25px, env(safe-area-inset-bottom));
     background: transparent;
 }
 
@@ -346,11 +415,12 @@ html, body {
 
 .chat-input {
     flex: 1;
+    min-width: 0;
     background: transparent;
     border: none;
     color: var(--text-main);
     padding: 12px;
-    font-size: 16px;
+    font-size: 16px; /* keep >=16px to stop iOS Safari auto-zooming on focus */
     outline: none;
 }
 .chat-input:disabled { cursor: not-allowed; opacity: 0.6; }
@@ -364,6 +434,8 @@ html, body {
     font-weight: 700;
     cursor: pointer;
     transition: all 0.2s ease;
+    flex-shrink: 0;
+    min-height: 44px;
 }
 .send-button:hover:not(:disabled) {
     transform: translateY(-2px);
@@ -376,25 +448,21 @@ html, body {
 }
 
 /* --- Fixed Placeholder Config (Forced-Dark Proof) --- */
-.placeholder-text { 
-    text-align: center; 
-    margin: auto; 
-    max-width: 500px; 
+.placeholder-text {
+    text-align: center;
+    margin: auto;
+    max-width: 500px;
+    padding: 0 16px;
 }
 .placeholder-text h1 {
     font-size: 2.8rem;
     font-weight: 800;
     margin-bottom: 12px;
-
-    /* Fixed Force: Direct clean injection variables */
     color: var(--text-main) !important;
-
-    /* System filters aur dynamic overlays ko kill karne ke liye code setup */
     background: none !important;
     -webkit-background-clip: unset !important;
     background-clip: unset !important;
     -webkit-text-fill-color: initial !important;
-    
     transition: none !important;
 }
 .placeholder-text p { color: var(--text-muted); font-size: 16px; }
@@ -428,6 +496,7 @@ html, body {
     left: 0;
     width: 100vw;
     height: 100vh;
+    height: 100dvh;
     background: rgba(0, 0, 0, 0.4);
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
@@ -448,35 +517,47 @@ html, body {
 @media (max-width: 768px) {
     /* 1. Hamburger and Close icons display trigger */
     .hamburger-btn {
-        display: block;
+        display: flex;
     }
-    
+
     .sidebar-close-btn {
         display: block;
     }
 
-    /* 2. Modern ChatGPT Slide-in Effect */
+    /* 2. Modern slide-in effect, width driven by --sidebar-w so it
+       scales down automatically on narrow phones */
     .sidebar {
         position: fixed;
         top: 0;
-        left: -280px; 
+        left: calc(-1 * var(--sidebar-w));
+        width: var(--sidebar-w);
         height: 100vh;
-        transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        height: 100dvh;
         box-shadow: none;
     }
 
     .sidebar.open {
-        left: 0; 
+        left: 0;
         box-shadow: 10px 0 40px rgba(0, 0, 0, 0.6);
     }
 
     /* 3. Screen Structure Cleanups */
     .chat-header {
         padding: 12px 16px;
+        padding-top: max(12px, env(safe-area-inset-top));
+        gap: 8px;
+    }
+
+    .header-start {
+        gap: 8px;
     }
 
     .header-title {
         font-size: 15px;
+    }
+
+    .header-actions {
+        gap: 8px;
     }
 
     .theme-toggle, .logout-btn {
@@ -495,7 +576,7 @@ html, body {
 
     /* 4. Strict Mobile Overrides for Heading Layout Engines */
     .placeholder-text h1 {
-        font-size: 1.8rem !important; 
+        font-size: 1.8rem !important;
         color: var(--text-main) !important;
         background: none !important;
         -webkit-background-clip: unset !important;
@@ -504,13 +585,14 @@ html, body {
     }
 
     .bubble {
-        max-width: 88%; 
+        max-width: 88%;
         font-size: 14.5px;
         padding: 10px 14px;
     }
 
     .input-wrapper {
         padding: 12px 14px;
+        padding-bottom: max(12px, env(safe-area-inset-bottom));
     }
 
     .input-area {
@@ -519,12 +601,53 @@ html, body {
     }
 
     .chat-input {
-        font-size: 15px;
+        font-size: 16px; /* unchanged from base on purpose, see comment above */
         padding: 8px;
     }
 
     .send-button {
         padding: 8px 14px;
         font-size: 13px;
+        min-height: 40px;
+    }
+}
+
+/* Small phones (SE, older/narrower Android) — this is the width
+   where the header actually ran out of room and started overflowing.
+   Collapse the theme-toggle and logout labels down to icon-only. */
+@media (max-width: 420px) {
+    .header-title-group .status-text {
+        display: none;
+    }
+
+    .theme-toggle .btn-label,
+    .logout-btn .btn-label {
+        display: none;
+    }
+
+    .theme-toggle, .logout-btn {
+        padding: 8px;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        justify-content: center;
+    }
+
+    .header-actions {
+        gap: 6px;
+    }
+
+    .user-avatar {
+        width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+
+    .placeholder-text h1 {
+        font-size: 1.5rem !important;
+    }
+
+    .placeholder-text p {
+        font-size: 14px;
     }
 }
