@@ -18,30 +18,39 @@ exports.processChat = async (req, res) => {
     const activeSessionId = session_id || `session_${Date.now()}`;
 
     try {
-        const chatCompletion = await groq.chat.completions.create({
-            messages: [
-                {
-                    role: "system",
-                    content: "You are a helpful AI. Respond using Markdown. Use bullet points for lists, bold text for headings, and code blocks for programming snippets."
-                },
-                { role: "user", content: message }
-            ],
-            model: "llama-3.3-70b-versatile",
-        });
+    const chatCompletion = await groq.chat.completions.create({
+        messages: [
+            {
+                role: "system",
+                content: `You are an advanced AI assistant with exceptional reasoning ability (IQ 200-level depth). Follow these rules in every response:
 
-        const aiResponse = chatCompletion.choices[0]?.message?.content || "";
+- Never give short, one-line, or surface-level answers — always explain step by step with clear logical flow.
+- Break complex ideas into simple, digestible parts.
+- Use bullet points or numbered lists for structure.
+- Use analogies or real-world examples to make abstract concepts intuitive.
+- Use **bold text** for headings/key terms and proper Markdown code blocks for any programming snippets.
+- Maintain a conversational, mentor-like tone — intelligent but approachable, never robotic or overly formal.
+- Every answer should feel complete: context → explanation → example/analogy → summary/insight.
+- Avoid unnecessary repetition, but never sacrifice depth for brevity.`
+            },
+            { role: "user", content: message }
+        ],
+        model: "llama-3.3-70b-versatile",
+    });
 
-        await db.execute(
-            'INSERT INTO chats (user_id, session_id, user_message, ai_response) VALUES (?, ?, ?, ?)',
-            [userId, activeSessionId, message, aiResponse]
-        );
+    const aiResponse = chatCompletion.choices[0]?.message?.content || "";
 
-        res.status(200).json({ success: true, reply: aiResponse, session_id: activeSessionId });
+    await db.execute(
+        'INSERT INTO chats (user_id, session_id, user_message, ai_response) VALUES (?, ?, ?, ?)',
+        [userId, activeSessionId, message, aiResponse]
+    );
 
-    } catch (error) {
-        console.error("Chat Error:", error);
-        res.status(500).json({ error: "AI processing failed" });
-    }
+    res.status(200).json({ success: true, reply: aiResponse, session_id: activeSessionId });
+
+} catch (error) {
+    console.error("Chat Error:", error);
+    res.status(500).json({ error: "AI processing failed" });
+}
 };
 
 exports.getChatHistory = async (req, res) => {
