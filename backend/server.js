@@ -28,21 +28,21 @@ if (process.env.FRONTEND_URL) {
 //   credentials: true
 // }));
 
-// app.use(cors({
-//   origin: '*', 
-//   credentials: true
-// }));
-
 app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("CORS Policy Blocked"));
-    }
-  },
+  origin: '*', 
   credentials: true
 }));
+
+// app.use(cors({
+//   origin: function (origin, callback) {
+//     if (!origin || allowedOrigins.includes(origin)) {
+//       callback(null, true);
+//     } else {
+//       callback(new Error("CORS Policy Blocked"));
+//     }
+//   },
+//   credentials: true
+// }));
 
 
 // General API Limiter
