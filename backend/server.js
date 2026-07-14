@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
+const rateLimit = require("express-rate-limit");
 const chatRoutes = require('./routes/chatRoutes');
 const authRoutes = require('./routes/authRoutes'); 
 
@@ -32,11 +33,64 @@ app.use(cors({
   credentials: true
 }));
 
+
+// General API Limiter
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 Minutes
+  max: 100,
+  message: {
+    success: false,
+    message: "Too many requests. Please try again after 15 minutes."
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// Login Limiter
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  message: {
+    success: false,
+    message: "Too many login attempts. Try again after 15 minutes."
+  }
+});
+
+// Signup Limiter
+const signupLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 3,
+  message: {
+    success: false,
+    message: "Too many signup attempts. Please try later."
+  }
+});
+
+// AI Chat Limiter
+const chatLimiter = rateLimit({
+  windowMs: 60 * 1000, // 1 Minute
+  max: 20,
+  message: {
+    success: false,
+    message: "Chat request limit exceeded. Wait for a minute."
+  }
+});
+
 app.use(express.json());
 
 // Routes
-app.use('/api/chat', chatRoutes);
-app.use('/api/auth', authRoutes);
+// app.use('/api/chat', chatRoutes);
+// app.use('/api/auth', authRoutes);
+// General API Limit
+app.use("/api", apiLimiter);
+
+// Auth Routes
+app.use("/api/auth/login", loginLimiter);
+app.use("/api/auth/signup", signupLimiter);
+app.use("/api/auth", authRoutes);
+
+// Chat Routes
+app.use("/api/chat", chatLimiter, chatRoutes);
 
 app.get("/", (req, res) => {
     res.json({
