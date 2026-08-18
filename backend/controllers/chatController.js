@@ -35,7 +35,7 @@ exports.processChat = async (req, res) => {
                 },
                 { role: "user", content: message }
             ],
-            model: "llama-3.3-70b-versatile",
+            model: "openai/gpt-oss-20b",
         });
 
         const aiResponse = chatCompletion.choices[0]?.message?.content || "";
